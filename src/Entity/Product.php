@@ -19,6 +19,12 @@ class Product
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255, nullable: false)]
+    public ?string $color = null;
+
+    #[ORM\Column(length: 255, nullable: false)]
+    public ?string $height = null;
+
     #[ORM\Column]
     private ?float $originalValue = null;
 
