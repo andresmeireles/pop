@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'customers')]
@@ -17,8 +20,10 @@ class Customer
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message: 'Empresa necessita ter uma razão social')]
     private ?string $tradeName = null;
 
+    #[Assert\Length(min: 11, minMessage: 'Tamanho minimo de caracteres necessita ser 11')]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cnpj = null;
 

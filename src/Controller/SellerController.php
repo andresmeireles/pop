@@ -16,17 +16,22 @@ class SellerController extends AbstractController
     /**
      * @throws ApiException
      */
-    #[Route('/seller', name: 'create_seller', methods: [Request::METHOD_POST])]
+    #[Route("/seller", name: "create_seller", methods: [Request::METHOD_POST])]
     public function create(Request $request, Manage $sellerManage): JsonResponse
     {
-        $sellerName = $request->getPayload()->getString('name');
-        $user = $request->request->get('user');
+        $sellerName = $request->getPayload()->getString("name");
+        $user = $request->request->get("user");
 
         $createdSeller = $sellerManage->add($sellerName);
         if (null !== $user) {
             $sellerManage->bindToUser($createdSeller->getId(), (int) $user);
         }
 
-        return $this->json(['reponse' => sprintf('User %s was created', $createdSeller->getName())]);
+        return $this->json([
+            "response" => sprintf(
+                "User %s was created",
+                $createdSeller->getName()
+            ),
+        ]);
     }
 }
