@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
@@ -21,6 +23,7 @@ class Product
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: 'Produto necessita de uma cor')]
     #[Assert\Length(min: 3, minMessage: 'Cor necessita ter pelo menos 3 caracteres')]
     #[ORM\Column(length: 255, nullable: false)]
     public ?string $color = null;
@@ -31,7 +34,6 @@ class Product
 
     #[Assert\NotBlank(message: 'Produto necessita de um valor como preço')]
     #[Assert\Positive]
-    #[Assert\Currency]
     #[ORM\Column]
     private ?float $originalValue = null;
 
@@ -44,7 +46,7 @@ class Product
     /**
      * @var Collection<int, OrderProduct>
      */
-    #[ORM\OneToMany(targetEntity: OrderProduct::class, mappedBy: 'product_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: OrderProduct::class, mappedBy: 'product', orphanRemoval: true)]
     private Collection $orderProducts;
 
     public function __construct()

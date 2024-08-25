@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\ProductCategory;
@@ -14,6 +16,14 @@ class ProductCategoryRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ProductCategory::class);
+    }
+
+    public function create(ProductCategory $productCategory): ProductCategory
+    {
+        $this->getEntityManager()->persist($productCategory);
+        $this->getEntityManager()->flush();
+
+        return $productCategory;
     }
 
     //    /**

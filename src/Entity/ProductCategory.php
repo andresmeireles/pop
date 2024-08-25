@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
 #[ORM\Table(name: 'product_categories')]
@@ -16,6 +19,7 @@ class ProductCategory
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Categoria necessita de um nome')]
     #[ORM\Column(length: 255, unique: true)]
     private ?string $name = null;
 
