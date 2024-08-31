@@ -15,11 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Customer
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Empresa necessita ter uma razão social')]
     private ?string $tradeName = null;
 
@@ -29,6 +29,15 @@ class Customer
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $companyName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $city = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $state = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    public ?string $email = null;
 
     /**
      * @var Collection<int, Order>

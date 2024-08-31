@@ -7,7 +7,7 @@ namespace App\Action\Seller;
 use App\Contracts\Repository\SellerRepositoryInterface;
 use App\Contracts\Repository\UserRepositoryInterface;
 use App\Entity\Seller;
-use App\Exceptions\ApiException;
+use App\Exception\ApiException;
 
 readonly class Manage
 {

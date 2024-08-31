@@ -15,12 +15,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Product
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     #[ORM\Column]
     private ?int $id = null;
 
     #[Assert\NotBlank(message: 'Produto necessita de um nome')]
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 255)]
     private ?string $name = null;
 
     #[Assert\NotBlank(message: 'Produto necessita de uma cor')]

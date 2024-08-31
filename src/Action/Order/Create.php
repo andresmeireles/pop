@@ -6,7 +6,7 @@ namespace App\Action\Order;
 
 use App\Contracts\Repository\CustomerRepositoryInterface;
 use App\Contracts\Repository\SellerRepositoryInterface;
-use App\Exceptions\ApiException;
+use App\Exception\ApiException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Create

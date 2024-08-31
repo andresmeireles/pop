@@ -28,3 +28,9 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###> Other
+import-product.php
+import-customer.php
+product.txt
+customer.txt

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Action\Seller\Manage;
-use App\Exceptions\ApiException;
+use App\Exception\ApiException;
 use App\Repository\SellerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240817180651 extends AbstractMigration
+final class Version20240831234834 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,46 +20,30 @@ final class Version20240817180651 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP SEQUENCE user_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE additional_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE customer_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE order_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE order_product_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE product_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE product_category_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE region_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE seller_id_seq CASCADE');
-        $this->addSql('CREATE SEQUENCE additionals_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE customers_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE freights_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE order_products_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE "orders_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE product_categories_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE products_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE regions_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE sellers_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE "users_id_seq" INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE TABLE additionals (id INT NOT NULL, order_id INT NOT NULL, name VARCHAR(255) NOT NULL, value NUMERIC(2, 0) NOT NULL, addition BOOLEAN NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE additionals (id SERIAL NOT NULL, order_id INT NOT NULL, name VARCHAR(255) NOT NULL, value NUMERIC(2, 0) NOT NULL, addition BOOLEAN NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_52EC581A8D9F6D38 ON additionals (order_id)');
-        $this->addSql('CREATE TABLE customers (id INT NOT NULL, trade_name VARCHAR(255) NOT NULL, cnpj VARCHAR(255) DEFAULT NULL, company_name VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE freights (id INT NOT NULL, product_category_id INT NOT NULL, region_id INT NOT NULL, value NUMERIC(10, 0) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE customers (id SERIAL NOT NULL, trade_name VARCHAR(255) NOT NULL, cnpj VARCHAR(255) DEFAULT NULL, company_name VARCHAR(255) DEFAULT NULL, city VARCHAR(255) DEFAULT NULL, state VARCHAR(255) DEFAULT NULL, email VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE freights (id SERIAL NOT NULL, product_category_id INT NOT NULL, region_id INT NOT NULL, value NUMERIC(10, 0) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_A620F5D4BE6903FD ON freights (product_category_id)');
         $this->addSql('CREATE INDEX IDX_A620F5D498260155 ON freights (region_id)');
-        $this->addSql('CREATE TABLE order_products (id INT NOT NULL, order_id INT NOT NULL, product_id INT NOT NULL, price NUMERIC(10, 0) NOT NULL, quantity INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE order_products (id SERIAL NOT NULL, order_id INT NOT NULL, product_id INT NOT NULL, price NUMERIC(10, 0) NOT NULL, quantity INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_5242B8EB8D9F6D38 ON order_products (order_id)');
         $this->addSql('CREATE INDEX IDX_5242B8EB4584665A ON order_products (product_id)');
-        $this->addSql('CREATE TABLE "orders" (id INT NOT NULL, customer_id INT NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "orders" (id SERIAL NOT NULL, customer_id INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_E52FFDEE9395C3F3 ON "orders" (customer_id)');
-        $this->addSql('CREATE TABLE product_categories (id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
-        $this->addSql('CREATE TABLE products (id INT NOT NULL, name VARCHAR(255) NOT NULL, original_value DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE product_categories (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_A99419435E237E06 ON product_categories (name)');
+        $this->addSql('CREATE TABLE products (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, color VARCHAR(255) NOT NULL, height VARCHAR(255) NOT NULL, original_value DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE product_product_category (product_id INT NOT NULL, product_category_id INT NOT NULL, PRIMARY KEY(product_id, product_category_id))');
         $this->addSql('CREATE INDEX IDX_437017AA4584665A ON product_product_category (product_id)');
         $this->addSql('CREATE INDEX IDX_437017AABE6903FD ON product_product_category (product_category_id)');
-        $this->addSql('CREATE TABLE regions (id INT NOT NULL, seller_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE regions (id SERIAL NOT NULL, seller_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_A26779F35E237E06 ON regions (name)');
         $this->addSql('CREATE INDEX IDX_A26779F38DE820D9 ON regions (seller_id)');
-        $this->addSql('CREATE TABLE sellers (id INT NOT NULL, user_id INT NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE sellers (id SERIAL NOT NULL, user_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_AFFE6BEF5E237E06 ON sellers (name)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_AFFE6BEFA76ED395 ON sellers (user_id)');
-        $this->addSql('CREATE TABLE "users" (id INT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE "users" (id SERIAL NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON "users" (email)');
         $this->addSql('ALTER TABLE additionals ADD CONSTRAINT FK_52EC581A8D9F6D38 FOREIGN KEY (order_id) REFERENCES "orders" (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE freights ADD CONSTRAINT FK_A620F5D4BE6903FD FOREIGN KEY (product_category_id) REFERENCES product_categories (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -77,25 +61,6 @@ final class Version20240817180651 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
-        $this->addSql('DROP SEQUENCE additionals_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE customers_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE freights_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE order_products_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE "orders_id_seq" CASCADE');
-        $this->addSql('DROP SEQUENCE product_categories_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE products_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE regions_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE sellers_id_seq CASCADE');
-        $this->addSql('DROP SEQUENCE "users_id_seq" CASCADE');
-        $this->addSql('CREATE SEQUENCE user_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE additional_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE customer_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE order_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE order_product_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE product_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE product_category_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE region_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
-        $this->addSql('CREATE SEQUENCE seller_id_seq INCREMENT BY 1 MINVALUE 1 START 1');
         $this->addSql('ALTER TABLE additionals DROP CONSTRAINT FK_52EC581A8D9F6D38');
         $this->addSql('ALTER TABLE freights DROP CONSTRAINT FK_A620F5D4BE6903FD');
         $this->addSql('ALTER TABLE freights DROP CONSTRAINT FK_A620F5D498260155');
