@@ -1,36 +1,16 @@
-.idea
-.zed
-
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
+.buildpath
+.settings/
+.project
+*.patch
+.idea/
+.git/
+runtime/
+vendor/
+.phpintel/
 .env
-.env.test
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
-###< symfony/framework-bundle ###
-
-###> friendsofphp/php-cs-fixer ###
-/.php-cs-fixer.php
-/.php-cs-fixer.cache
-###< friendsofphp/php-cs-fixer ###
-
-###>
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
+.DS_Store
+.phpunit*
+*.cache
+.vscode/
+/phpstan.neon
 /phpunit.xml
-###< symfony/phpunit-bridge ###
-
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
-
-###> Other
-import-product.php
-import-customer.php
-product.txt
-customer.txt
