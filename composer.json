@@ -24,9 +24,12 @@
         "hyperf/http-server": "~3.1.0",
         "hyperf/logger": "~3.1.0",
         "hyperf/memory": "~3.1.0",
-        "hyperf/process": "~3.1.0"
+        "hyperf/process": "~3.1.0",
+        "hyperf/validation": "^3.1",
+        "lcobucci/jwt": "^5.3"
     },
     "require-dev": {
+        "filp/whoops": "^2.16",
         "friendsofphp/php-cs-fixer": "^3.0",
         "hyperf/devtool": "~3.1.0",
         "hyperf/testing": "~3.1.0",

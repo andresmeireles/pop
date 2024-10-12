@@ -15,7 +15,9 @@ use Psr\Log\LogLevel;
 use function Hyperf\Support\env;
 
 return [
-    'app_name' => env('APP_NAME', 'skeleton'),
+    'app_name' => env('APP_NAME', 'hermes'),
+    'app_path' => env('APP_URL', ''),
+    'app_key' => env('APP_KEY', ''),
     'app_env' => env('APP_ENV', 'dev'),
     'scan_cacheable' => env('SCAN_CACHEABLE', false),
     StdoutLoggerInterface::class => [

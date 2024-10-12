@@ -1,19 +1,22 @@
 <?php
 
 declare(strict_types=1);
-/**
- * This file is part of Hyperf.
- *
- * @link     https://www.hyperf.io
- * @document https://hyperf.wiki
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
- */
+
+use App\Exception\Handler\ApiServerExceptionHandler;
+use App\Exception\Handler\AppExceptionHandler;
+use App\Exception\Handler\WhoopsDevelopmentException;
+use Hyperf\HttpServer\Exception\Handler\HttpExceptionHandler;
+
 return [
     'handler' => [
+        /*
+         * The last middleware is executed first?
+         */
         'http' => [
-            Hyperf\HttpServer\Exception\Handler\HttpExceptionHandler::class,
-            App\Exception\Handler\AppExceptionHandler::class,
+            HttpExceptionHandler::class,
+            ApiServerExceptionHandler::class,
+            WhoopsDevelopmentException::class,
+            AppExceptionHandler::class,
         ],
     ],
 ];
