@@ -6,6 +6,8 @@ namespace App\Action\Order;
 
 use App\Contract\Bridge\AppLoggerInterface;
 use App\Contract\Database\TransactionInterface;
+use App\Contract\Error\AppErrorInterface;
+use App\Contract\Error\OrderError;
 use App\Contract\Model\CustomerInterface;
 use App\Contract\Model\SellerInterface;
 use App\Contract\Repository\AdditionalRepositoryInterface;
@@ -14,7 +16,6 @@ use App\Contract\Repository\OrderProductRepositoryInterface;
 use App\Contract\Repository\OrderRepositoryInterface;
 use App\Contract\Repository\ProductRepositoryInterface;
 use App\Contract\Repository\SellerRepositoryInterface;
-use App\Exception\OrderException;
 use App\Model\Order;
 use Exception;
 use Throwable;
@@ -40,17 +41,16 @@ readonly class Create
      *     products: array<int, array{id: int, value: float, quantity: int}>,
      *     additionals?: array<int, array{name: string, addition: bool, value: float}>
      * } $orderData
-     * @throws OrderException
      */
-    public function execute(array $orderData): Order
+    public function execute(array $orderData): AppErrorInterface|Order
     {
         $this->transaction->beginTransaction();
         try {
             $seller = $this->sellerRepository->byId($orderData['seller']);
             $customer = $this->customerRepository->byId($orderData['customer']);
             $order = $this->createOrder($customer, $seller);
-            $this->addProductsToOrder($order, $orderData['products']);
-            $this->addAdditionalToOrder($order, $orderData['additionals']);
+            $this->addProductsToOrder($orderData['products'], $order);
+            $this->addAdditionalToOrder($orderData['additionals'], $order);
             $this->transaction->commit();
 
             return $order;
@@ -58,9 +58,7 @@ readonly class Create
             $this->logger->error($e->getMessage());
             $this->transaction->rollBack();
 
-            throw new OrderException('error when create order', context: [
-                'messages' => $e->getMessage(),
-            ]);
+            return OrderError::CreateOrderError;
         }
     }
 
@@ -76,19 +74,19 @@ readonly class Create
      * @param array<int, array{id: int, value: float, quantity: int}> $products
      * @throws Exception
      */
-    private function addProductsToOrder(Order $order, array $products): void
+    private function addProductsToOrder(array $products, Order $order): void
     {
         array_walk(
             $products,
             function (array $p) use ($order) {
-                $product = $this->productRepository->byId($p['product_id']);
+                $product = $this->productRepository->byId($p['id']);
                 if ($product === null) {
-                    throw new Exception('product not found: ' . $p['product_id']);
+                    throw new Exception('product not found: ' . $p['id']);
                 }
 
                 $this->orderProductRepository->create([
-                    'order_id' => $order->id,
-                    'product_id' => $product->id,
+                    'order_id' => $order->getId(),
+                    'product_id' => $product->getId(),
                     'amount' => $p['value'],
                     'quantity' => $p['quantity'],
                 ]);
@@ -99,7 +97,7 @@ readonly class Create
     /**
      * @param array<int, array{name: string, addition: bool, value: float}> $products
      */
-    private function addAdditionalToOrder(Order $order, array $products): void
+    private function addAdditionalToOrder(array $products, Order $order): void
     {
         array_walk(
             $products,

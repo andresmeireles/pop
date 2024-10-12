@@ -6,6 +6,7 @@ namespace App\Model;
 
 use App\Contract\Model\CustomerInterface;
 use App\Contract\Model\OrderInterface;
+use App\Contract\Model\ProductInterface;
 use App\Contract\Model\SellerInterface;
 use DateTimeInterface;
 use Hyperf\Database\Model\Relations\BelongsTo;
@@ -57,7 +58,9 @@ class Order extends Model implements OrderInterface
 
     public function getProducts(): array
     {
-        return $this->products->toArray();
+        $products = $this->products;
+
+        return array_map(fn (ProductInterface $p) => $p, $products);
     }
 
     public function getCreatedAt(): DateTimeInterface

@@ -34,6 +34,13 @@ class Seller extends Model implements SellerInterface
         return $this->user;
     }
 
+    public function getOrders(): array
+    {
+        $orders = $this->orders;
+
+        return iterator_to_array($orders);
+    }
+
     public function user(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');

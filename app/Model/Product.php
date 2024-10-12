@@ -12,8 +12,6 @@ class Product extends Model implements ProductInterface
 {
     public bool $timestamps = false;
 
-    protected ?string $table = 'products';
-
     protected array $fillable = [
         'name',
         'color',
@@ -30,26 +28,26 @@ class Product extends Model implements ProductInterface
 
     public function getId(): int
     {
-        // TODO: Implement getId() method.
+        return $this->id;
     }
 
     public function getName(): string
     {
-        // TODO: Implement getName() method.
+        return $this->name;
     }
 
     public function getColor(): string
     {
-        // TODO: Implement getColor() method.
+        return $this->color;
     }
 
     public function getHeight(): string
     {
-        // TODO: Implement getHeight() method.
+        return $this->height;
     }
 
     public function getOriginalValue(): float
     {
-        // TODO: Implement getOriginalValue() method.
+        return $this->original_value;
     }
 }

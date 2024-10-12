@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Contract\Model\ProductInterface;
 use App\Contract\Repository\ProductRepositoryInterface;
-use App\Model\Product;
 
 class ProductRepository implements ProductRepositoryInterface
 {
     use Repository;
 
-    private readonly Product $model;
-
-    public function __construct()
+    public function __construct(private readonly ProductInterface $model)
     {
-        $this->model = new Product();
     }
 }

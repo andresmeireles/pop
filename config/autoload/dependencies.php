@@ -7,8 +7,12 @@ use App\Action\Database\Transaction;
 use App\Bridge\AppLogger;
 use App\Contract\Bridge\AppLoggerInterface;
 use App\Contract\Database\TransactionInterface;
+use App\Contract\Model\AdditionalInterface;
 use App\Contract\Model\CustomerInterface;
+use App\Contract\Model\OrderInterface;
+use App\Contract\Model\OrderProductInterface;
 use App\Contract\Model\PersonalAccessTokenInterface;
+use App\Contract\Model\ProductInterface;
 use App\Contract\Model\SellerInterface;
 use App\Contract\Model\UserInterface;
 use App\Contract\Repository\AdditionalRepositoryInterface;
@@ -19,8 +23,12 @@ use App\Contract\Repository\PersonalAccessTokenRepositoryInterface;
 use App\Contract\Repository\ProductRepositoryInterface;
 use App\Contract\Repository\SellerRepositoryInterface;
 use App\Contract\Repository\UserRepositoryInterface;
+use App\Model\Additional;
 use App\Model\Customer;
+use App\Model\Order;
+use App\Model\OrderProduct;
 use App\Model\PersonalAccessToken as PersonalAccessTokenModel;
+use App\Model\Product;
 use App\Model\Seller;
 use App\Model\User;
 use App\Repository\AdditionalRepository;
@@ -48,6 +56,10 @@ return [
     PersonalAccessTokenInterface::class => PersonalAccessTokenModel::class,
     SellerInterface::class => Seller::class,
     CustomerInterface::class => Customer::class,
+    OrderInterface::class => Order::class,
+    OrderProductInterface::class => OrderProduct::class,
+    AdditionalInterface::class => Additional::class,
+    ProductInterface::class => Product::class,
     TransactionInterface::class => Transaction::class,
     AppLoggerInterface::class => AppLogger::class,
     PersonalAccessToken::class => fn (ContainerInterface $container) => new PersonalAccessToken(

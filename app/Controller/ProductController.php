@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 #[Controller(prefix: '/product')]
 class ProductController extends AbstractController
 {
-    public function __construct(private ProductRepositoryInterface $productRepository)
+    public function __construct(private readonly ProductRepositoryInterface $productRepository)
     {
     }
 

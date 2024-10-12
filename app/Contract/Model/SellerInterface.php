@@ -11,4 +11,7 @@ interface SellerInterface extends ModelInterface
     public function getName(): string;
 
     public function getUser(): UserInterface;
+
+    /** @return array<int, OrderInterface> */
+    public function getOrders(): array;
 }
