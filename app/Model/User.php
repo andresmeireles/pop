@@ -39,4 +39,12 @@ class User extends Model implements UserInterface
     {
         return $this->password;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
+    }
 }

@@ -9,4 +9,5 @@ use App\Contract\Model\SellerInterface;
 /** @extends RepositoryInterface<SellerInterface> */
 interface SellerRepositoryInterface extends RepositoryInterface
 {
+    public function sellerByUserId(int $userId): ?SellerInterface;
 }

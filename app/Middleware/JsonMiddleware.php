@@ -21,5 +21,6 @@ class JsonMiddleware implements MiddlewareInterface
         $response->withHeader('Content-Type', 'application/json');
 
         return $response;
+
     }
 }

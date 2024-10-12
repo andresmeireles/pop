@@ -8,11 +8,11 @@ use App\Contract\Database\ConditionInterface;
 
 final readonly class Condition implements ConditionInterface
 {
-    private function __construct(private string $field, private string $value, private string $condition)
+    private function __construct(private string $field, private int|string $value, private string $condition)
     {
     }
 
-    public static function create(string $field, string $value, ?string $condition = null): self
+    public static function create(string $field, int|string $value, ?string $condition = null): self
     {
         return new self($field, $value, $condition ?? '=');
     }
@@ -22,7 +22,7 @@ final readonly class Condition implements ConditionInterface
         return $this->field;
     }
 
-    public function value(): string
+    public function value(): string|int
     {
         return $this->value;
     }

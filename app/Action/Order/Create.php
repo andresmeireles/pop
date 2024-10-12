@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Action\Order;
 
+use App\Contract\Bridge\AppLoggerInterface;
 use App\Contract\Database\TransactionInterface;
 use App\Contract\Model\CustomerInterface;
 use App\Contract\Model\SellerInterface;
@@ -28,6 +29,7 @@ readonly class Create
         private AdditionalRepositoryInterface $additionalRepository,
         private OrderProductRepositoryInterface $orderProductRepository,
         private TransactionInterface $transaction,
+        private AppLoggerInterface $logger,
     ) {
     }
 
@@ -44,8 +46,8 @@ readonly class Create
     {
         $this->transaction->beginTransaction();
         try {
-            $seller = $this->sellerRepository->byId($orderData['seller_id']);
-            $customer = $this->customerRepository->byId($orderData['customer_id']);
+            $seller = $this->sellerRepository->byId($orderData['seller']);
+            $customer = $this->customerRepository->byId($orderData['customer']);
             $order = $this->createOrder($customer, $seller);
             $this->addProductsToOrder($order, $orderData['products']);
             $this->addAdditionalToOrder($order, $orderData['additionals']);
@@ -53,6 +55,7 @@ readonly class Create
 
             return $order;
         } catch (Throwable $e) {
+            $this->logger->error($e->getMessage());
             $this->transaction->rollBack();
 
             throw new OrderException('error when create order', context: [

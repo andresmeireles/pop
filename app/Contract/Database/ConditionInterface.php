@@ -8,10 +8,10 @@ interface ConditionInterface
 {
     public function field(): string;
 
-    public function value(): string;
+    public function value(): int|string;
 
     public function condition(): ?string;
 
-    /** @return array{field: string, value: string, condition?: string} */
+    /** @return array{field: string, value: int|string, condition?: string} */
     public function toArray(): array;
 }

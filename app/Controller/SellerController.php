@@ -4,22 +4,29 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Model\Seller;
+use App\Bridge\AuthUser;
+use App\Contract\Repository\SellerRepositoryInterface;
+use App\Middleware\HasAuthorizationTokenMiddleware;
 use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\PostMapping;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
+#[Middleware(middleware: HasAuthorizationTokenMiddleware::class)]
 #[Controller]
 class SellerController extends AbstractController
 {
-    public function byId(int $id): ResponseInterface
+    #[PostMapping(path: '/seller')]
+    public function create(ServerRequestInterface $request, SellerRepositoryInterface $repository, AuthUser $authUser): ResponseInterface
     {
-        $seller = Seller::find($id);
-        return $this->response->json($seller);
-    }
+        $name = $request->getParsedBody()['name'];
+        $user = $authUser->user()->getId();
+        $seller = $repository->create([
+            'name' => $name,
+            'user_id' => $user,
+        ]);
 
-    public function create(array $seller): ResponseInterface
-    {
-        $seller = Seller::create($seller);
-        return $this->response->json($seller);
+        return $this->response->json(['seller created']);
     }
 }

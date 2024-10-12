@@ -54,15 +54,17 @@ class AuthController extends AbstractController
 
         $pat = $personalAccessToken->create($user);
 
-        return $this->response->json([$pat->getJwt()]);
+        return $this->response->json(['token' => $pat->getJwt()]);
     }
 
     #[Middleware(middleware: HasAuthorizationTokenMiddleware::class)]
     #[GetMapping(path: '/me')]
     public function me(ServerRequestInterface $request): ResponseInterface
     {
-        $user = $this->personalAccessToken->parse($request->getHeader('Authorization')[0]);
+        $authorization = $request->getHeader('Authorization');
+        $jwt = str_replace(['Bearer', ' '], '', $authorization[0]);
+        $user = $this->personalAccessToken->parse($jwt);
 
-        return $this->response->json($user);
+        return $this->response->json($user->toArray());
     }
 }

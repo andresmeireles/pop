@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Action\Authentication;
 
 use App\Action\Database\Condition;
+use App\Contract\Error\AppErrorInterface;
+use App\Contract\Error\AuthenticationError;
 use App\Contract\Model\PersonalAccessTokenInterface;
 use App\Contract\Model\UserInterface;
 use App\Contract\Repository\PersonalAccessTokenRepositoryInterface;
@@ -12,8 +14,8 @@ use DateTime;
 use DateTimeImmutable;
 use Lcobucci\JWT\Encoding\ChainedFormatter;
 use Lcobucci\JWT\Encoding\JoseEncoder;
-use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\Builder;
 use Lcobucci\JWT\Token\Parser;
 use Lcobucci\JWT\UnencryptedToken;
@@ -52,15 +54,17 @@ final readonly class PersonalAccessToken
         ]);
     }
 
-    public function parse(string $jwt): UserInterface
+    public function parse(string $jwt): AppErrorInterface|UserInterface
     {
         $parser = new Parser(new JoseEncoder());
         $parsedToken = $this->executeParse($parser, $jwt);
 
-        // TODO: fazer tratativa de erro aqui
+        if ($parsedToken === null) {
+            return AuthenticationError::InvalidToken;
+        }
 
         if ($parsedToken->isExpired(new DateTime())) {
-            // TODO: erro aqui
+            return AuthenticationError::ExpiredToken;
         }
 
         $pat = $this->personalAccessTokenRepository->findBy(
@@ -68,7 +72,7 @@ final readonly class PersonalAccessToken
         );
 
         if (count($pat) === 0) {
-            // TODO: erro aqui
+            return AuthenticationError::InvalidToken;
         }
 
         return $pat[0]->getUser();
@@ -82,12 +86,13 @@ final readonly class PersonalAccessToken
         return password_hash($phrase, PASSWORD_DEFAULT);
     }
 
-    private function executeParse(Parser $parser, string $tokenToParse): UnencryptedToken
+    private function executeParse(Parser $parser, string $tokenToParse): ?UnencryptedToken
     {
         try {
             return $parser->parse($tokenToParse);
-        } catch (Throwable $e) {
-            // TODO: adicionar erro aqui
+        } catch (Throwable) {
+            // TODO: adicionar log aqui
+            return null;
         }
     }
 }

@@ -21,7 +21,7 @@ class ApiServerException extends Exception
     public function render(ResponseInterface $response): ResponseInterface
     {
         $r = $response->withHeader('Content-Type', 'application/json;charset=utf-8')
-            ->withStatus(500);
+            ->withStatus($this->code === 0 ? 500 : $this->code);
 
         $r->getBody()->write(
             json_encode([
