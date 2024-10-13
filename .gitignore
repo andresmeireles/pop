@@ -2,6 +2,7 @@
 .settings/
 .project
 *.patch
+.phpstorm.meta.php
 .idea/
 .git/
 runtime/
